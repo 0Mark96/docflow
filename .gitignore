@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+
+# build
+build/
+dist/
+
+# testing
+coverage/
+playwright-report/
+test-results/
+
+# env (keep .env.example)
+.env
+.env.*
+!.env.example
+
+# supabase local
+supabase/.temp/
+supabase/.branches/
+
+# vercel
+.vercel/
+
+# misc
+.DS_Store
+*.log
+*.tsbuildinfo
+next-env.d.ts
