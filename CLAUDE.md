@@ -13,7 +13,7 @@ DocFlow: document intelligence web app for SMBs. Users upload invoices, contract
 
 ## Stack
 
-Next.js (App Router) + TypeScript strict, Supabase (Postgres, Auth, Storage, RLS, pgvector), Anthropic SDK (`@anthropic-ai/sdk`), Zod, fast-xml-parser, Vitest, Playwright, Vercel.
+Next.js (App Router) + TypeScript strict, Tailwind CSS, Supabase (Postgres, Auth, Storage, RLS, pgvector), Anthropic SDK (`@anthropic-ai/sdk`), Zod, fast-xml-parser, Vitest, Playwright, Vercel.
 
 ## Commands
 
@@ -36,4 +36,6 @@ Added with milestone 1 (project scaffold).
 - Conventional Commits in English (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
 - Every PR: CI green (lint, type-check, tests), description following `.github/pull_request_template.md`.
 - Server Components by default; add `"use client"` only for interactivity, and keep client components small.
+- Style with Tailwind utility classes only: no custom CSS files beyond the global entry, no other styling libraries.
+- Form controls come from the shared components in `src/components/ui/`. Never render a native `<select>`.
 - Model IDs and other provider constants live in one config module; check the provider docs for current IDs before changing them.

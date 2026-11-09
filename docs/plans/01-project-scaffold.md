@@ -8,9 +8,9 @@ A Next.js + TypeScript strict application that runs locally, with linting, type-
 
 ## Tasks
 
-1. Create the Next.js app (App Router, TypeScript, ESLint, `src/` directory, import alias `@/*`). `create-next-app` refuses a non-empty folder: generate it in a temporary directory and move the files into the repository root, keeping the existing `docs/`, `README.md`, `CLAUDE.md`, `.github/`, `.gitignore` and `.editorconfig` (merge `.gitignore` entries if needed).
+1. Create the Next.js app (App Router, TypeScript, ESLint, Tailwind CSS, `src/` directory, import alias `@/*`). `create-next-app` refuses a non-empty folder: generate it in a temporary directory and move the files into the repository root, keeping the existing `docs/`, `README.md`, `CLAUDE.md`, `.github/`, `.gitignore` and `.editorconfig` (merge `.gitignore` entries if needed).
 2. Enable `strict` in `tsconfig.json` (and `noUncheckedIndexedAccess`).
-3. Add Prettier with an ESLint-compatible config; scripts `lint`, `format`, `type-check`.
+3. Add Prettier with an ESLint-compatible config and `prettier-plugin-tailwindcss` (sorts class names); scripts `lint`, `format`, `type-check`.
 4. Add Vitest with one sample test for a utility in `src/lib/`; script `test`.
 5. Add `.env.example` (empty for now, with a header comment explaining the convention).
 6. Add `.github/workflows/ci.yml`: on pull request, install with `npm ci`, run `lint`, `type-check`, `test`.
