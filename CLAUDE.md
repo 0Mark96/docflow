@@ -9,7 +9,7 @@ DocFlow: document intelligence web app for SMBs. Users upload invoices, contract
 - `docs/README.md`: map and read order.
 - `docs/architecture.md`: as-designed system (update it when the as-built system diverges).
 - `docs/decisions/`: Architecture Decision Records. A change that contradicts an ADR needs a new ADR that supersedes it.
-- `docs/plans/NN-*.md`: implementation plan of each milestone task. Work from the plan; record deviations in its "Outcome" section.
+- `docs/plans/m<milestone>-<NN>-<name>.md` (e.g. `m2-01-login-and-companies.md`): implementation plan of one task. A milestone can have several small plans. Index, naming and template: `docs/plans/README.md`. Work from the plan, keep its `Status` line current, and record deviations in its "Outcome" section.
 
 ## Stack
 
@@ -36,6 +36,6 @@ Added with milestone 1 (project scaffold).
 - Conventional Commits in English (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
 - Every PR: CI green (lint, type-check, tests), description following `.github/pull_request_template.md`.
 - Server Components by default; add `"use client"` only for interactivity, and keep client components small.
-- Style with Tailwind utility classes only: no custom CSS files beyond the global entry, no other styling libraries.
+- Style with Tailwind utility classes only (ADR 0005): no custom CSS files beyond the global entry, no CSS modules, no CSS-in-JS, no other styling libraries. Repeated class sets become a component, not a custom class.
 - Form controls come from the shared components in `src/components/ui/`. Never render a native `<select>`.
 - Model IDs and other provider constants live in one config module; check the provider docs for current IDs before changing them.

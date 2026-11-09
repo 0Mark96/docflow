@@ -1,6 +1,9 @@
-# Plan 01: Project scaffold (M1)
+# Plan m1-01: Project scaffold
 
-Branch: `feature/project-scaffold` from `main`.
+- Milestone: M1
+- Depends on: none
+- Status: to do
+- Branch: `feature/project-scaffold` from `main`
 
 ## Goal
 
@@ -19,7 +22,7 @@ A Next.js + TypeScript strict application that runs locally, with linting, type-
 
 ## Verification
 
-- `npm run dev` shows the landing page at `http://localhost:3000`.
+- `npm run dev` shows the placeholder page at `http://localhost:3000`, styled with Tailwind classes (for example a centred title with `text-3xl font-semibold`).
 - `npm run lint`, `npm run type-check`, `npm test` pass locally.
 - The pull request shows the CI check green.
 

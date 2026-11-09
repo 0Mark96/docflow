@@ -4,7 +4,7 @@
 
 ## Why
 
-<!-- Link the plan (docs/plans/NN-*.md) or the issue. -->
+<!-- Link the plan (docs/plans/m<milestone>-<NN>-*.md) or the issue. -->
 
 ## How to verify
 

@@ -5,7 +5,7 @@ Status: **as designed**. Update this document when the implementation diverges.
 ## 1. Overview
 
 ```
-Browser (React)
+Browser (React, Tailwind CSS)
    │  HTTPS
    ▼
 Next.js on Vercel ─────────────► Anthropic API (extraction, answers)
@@ -31,7 +31,7 @@ The browser talks only to the Next.js server and to Supabase Auth. Every call to
 | `/documents/table` | Tabella dati | Logged in | Extracted fields of the company's documents, filter, sort, CSV export |
 | `/chat` | Chat | Logged in | Questions with cited documents |
 
-A logged-out request to a private page redirects to `/`; a logged-in visit to `/` redirects to `/documents`. Filters and sort live in the URL query string, so going back from a document detail restores the list as it was. Styling uses Tailwind; form controls are shared components in `src/components/ui/` (no native `<select>`).
+A logged-out request to a private page redirects to `/`; a logged-in visit to `/` redirects to `/documents`. Filters and sort live in the URL query string, so going back from a document detail restores the list as it was. Styling uses Tailwind utility classes only (ADR 0005); form controls are shared components in `src/components/ui/` (no native `<select>`).
 
 ## 2. Data flows
 
