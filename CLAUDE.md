@@ -34,7 +34,7 @@ Added with milestone 1 (project scaffold).
 
 - Branch per task from `main`: `feature/<short-name>`, `fix/<short-name>`. Short-lived; merge via pull request before starting a dependent task.
 - Conventional Commits in English (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
-- Every PR: CI green (lint, type-check, tests), description following `.github/pull_request_template.md`.
+- Every PR: CI green (lint, type-check, tests), description following `.github/pull_request_template.md`, including the "In plain words" section: the owner is learning Next.js, so explain what changed in simple terms.
 - Server Components by default; add `"use client"` only for interactivity, and keep client components small.
 - Style with Tailwind utility classes only (ADR 0005): no custom CSS files beyond the global entry, no CSS modules, no CSS-in-JS, no other styling libraries. Repeated class sets become a component, not a custom class.
 - Form controls come from the shared components in `src/components/ui/`. Never render a native `<select>`.

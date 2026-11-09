@@ -86,6 +86,9 @@ A plan with `Status: done` is history, not an instruction. When a whole mileston
 ## Goal
 One or two sentences: what the user sees when it is done.
 
+## What you will learn
+One or two concepts this task shows (for example: Server Components vs client components), and one small change the owner can make by hand to try them.
+
 ## Steps
 1. …
 2. …
