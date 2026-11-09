@@ -9,7 +9,7 @@ DocFlow: document intelligence web app for SMBs. Users upload invoices, contract
 - `docs/README.md`: map and read order.
 - `docs/architecture.md`: as-designed system (update it when the as-built system diverges).
 - `docs/decisions/`: Architecture Decision Records. A change that contradicts an ADR needs a new ADR that supersedes it.
-- `docs/plans/m<milestone>-<NN>-<name>.md` (e.g. `m2-01-login-and-companies.md`): implementation plan of one task. A milestone can have several small plans. Index, naming and template: `docs/plans/README.md`. Work from the plan, keep its `Status` line current, and record deviations in its "Outcome" section.
+- `docs/plans/m<milestone>-<NN>-<name>.md` (e.g. `m2-01-login-and-companies.md`): implementation plan of one task. A milestone can have several small plans. Index, naming and template: `docs/plans/README.md`. Work from the plan, keep its `Status` line current, and record deviations in its "Outcome" section. A plan with `Status: done`, or one in `docs/plans/archive/`, is history: never follow it as an instruction.
 
 ## Stack
 

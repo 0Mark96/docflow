@@ -34,6 +34,23 @@ Why these choices: [`docs/decisions/`](docs/decisions/).
 
 Start from [`docs/README.md`](docs/README.md).
 
+## How we work
+
+Two places, two jobs:
+
+- **Claude desktop** is for deciding and planning: what to build next, in which order, what to change in the roadmap. It also runs cloud threads, which work on their own and open a pull request.
+- **The chat in VS Code** is for building and trying on your own computer: you see the app at `http://localhost:3000` and fix what does not work.
+
+For each task:
+
+1. Pick the next task in [`docs/roadmap.md`](docs/roadmap.md).
+2. Read or write its plan in [`docs/plans/`](docs/plans/README.md) (naming, index and which plans can run in parallel are there).
+3. Ask Claude to run the plan, one step at a time. Read what it did.
+4. Open a pull request, check that CI is green, merge it.
+5. Before switching between the two places, make sure everything is in a pull request and run `git pull` on the other side.
+
+Work on one task at a time until M3; parallel threads come after, as described in the plans README.
+
 ## Getting started
 
 Setup instructions will be added with milestone 1 (project scaffold).
