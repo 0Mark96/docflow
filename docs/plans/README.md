@@ -40,6 +40,37 @@ Planned tasks (files are written by the task itself, before the code):
 
 `m6-01` runs early, in parallel with M3, so every pull request gets a preview link; production goes live at the end of M6.
 
+## Waves: what can run in parallel
+
+A wave starts when the pull requests of the previous wave are merged. Plans in the same wave touch different files and can be worked on at the same time. Until M3, work one plan at a time.
+
+| Wave | Plans | Mode |
+|---|---|---|
+| 1 | m1-01 | alone |
+| 2 | m2-01 | alone |
+| 3 | m2-02 (login page), m3-01 (extraction contract) | parallel |
+| 4 | m3-02, m3-03, m3-04, m6-01 | parallel |
+| 5 | m3-05 (extraction pipeline) | alone: it joins m3-02, m3-03 and m3-04 |
+| 6 | m4-01, m4-02 | parallel |
+| 7 | m5-01, m7-01, then m7-02 | m7-02 after m5-01 (it writes to the audit log) |
+
+### Files that two parallel plans can both touch
+
+| File | Rule |
+|---|---|
+| `supabase/migrations/` | Only one plan per wave creates tables. In wave 7, m5-01 and m7-01 touch different tables; the one merged second rebases. |
+| `src/lib/supabase/database.types.ts` | Regenerated only by the plan that adds a migration; after a rebase, regenerate it, never merge it by hand. |
+| `package.json`, `package-lock.json` | M3 dependencies are installed all at once by m3-01. A plan that needs another one says so in its PR. |
+| `src/lib/extraction/schema.ts` | Read-only in wave 4. If it must change, stop and ask. |
+| `src/lib/ai/` | Written by m3-03 (wave 4) and m7-01 (wave 7), never at the same time. |
+| `docs/architecture.md`, `docs/roadmap.md` | Each plan edits only the section of its own milestone. |
+
+Merge the pull requests of a wave one at a time, and after each merge ask the open ones to rebase on `main` and rerun the tests.
+
+## Finished plans
+
+A plan with `Status: done` is history, not an instruction. When a whole milestone is done, check that what matters is in `docs/architecture.md` or in a decision (`docs/decisions/`), then move its plans to `docs/plans/archive/` with `git mv`. The git history keeps them anyway.
+
 ## Templates
 
 **Small plan** (one page, one visible change):
@@ -54,6 +85,9 @@ Planned tasks (files are written by the task itself, before the code):
 
 ## Goal
 One or two sentences: what the user sees when it is done.
+
+## What you will learn
+One or two concepts this task shows (for example: Server Components vs client components), and one small change the owner can make by hand to try them.
 
 ## Steps
 1. …

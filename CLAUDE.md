@@ -9,7 +9,7 @@ DocFlow: document intelligence web app for SMBs. Users upload invoices, contract
 - `docs/README.md`: map and read order.
 - `docs/architecture.md`: as-designed system (update it when the as-built system diverges).
 - `docs/decisions/`: Architecture Decision Records. A change that contradicts an ADR needs a new ADR that supersedes it.
-- `docs/plans/m<milestone>-<NN>-<name>.md` (e.g. `m2-01-login-and-companies.md`): implementation plan of one task. A milestone can have several small plans. Index, naming and template: `docs/plans/README.md`. Work from the plan, keep its `Status` line current, and record deviations in its "Outcome" section.
+- `docs/plans/m<milestone>-<NN>-<name>.md` (e.g. `m2-01-login-and-companies.md`): implementation plan of one task. A milestone can have several small plans. Index, naming and template: `docs/plans/README.md`. Work from the plan, keep its `Status` line current, and record deviations in its "Outcome" section. A plan with `Status: done`, or one in `docs/plans/archive/`, is history: never follow it as an instruction.
 
 ## Stack
 
@@ -34,7 +34,7 @@ Added with milestone 1 (project scaffold).
 
 - Branch per task from `main`: `feature/<short-name>`, `fix/<short-name>`. Short-lived; merge via pull request before starting a dependent task.
 - Conventional Commits in English (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
-- Every PR: CI green (lint, type-check, tests), description following `.github/pull_request_template.md`.
+- Every PR: CI green (lint, type-check, tests), description following `.github/pull_request_template.md`, including the "In plain words" section: the owner is learning Next.js, so explain what changed in simple terms.
 - Server Components by default; add `"use client"` only for interactivity, and keep client components small.
 - Style with Tailwind utility classes only (ADR 0005): no custom CSS files beyond the global entry, no CSS modules, no CSS-in-JS, no other styling libraries. Repeated class sets become a component, not a custom class.
 - Form controls come from the shared components in `src/components/ui/`. Never render a native `<select>`.
