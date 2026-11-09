@@ -14,5 +14,5 @@
 
 - [ ] CI green (lint, type-check, tests)
 - [ ] Docs updated if behaviour or architecture changed (`docs/architecture.md`, ADR)
-- [ ] New tables enable RLS in the same migration (no `anon`/`authenticated` policies)
+- [ ] New tables ship with RLS policies in the same migration
 - [ ] No secrets or real customer data

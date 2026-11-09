@@ -13,7 +13,7 @@ DocFlow: document intelligence web app for SMBs. Users upload invoices, contract
 
 ## Stack
 
-Next.js (App Router) + TypeScript strict, Tailwind CSS, Supabase (Postgres, Storage, RLS, pgvector), Anthropic SDK (`@anthropic-ai/sdk`), Zod, fast-xml-parser, Vitest, Playwright, Vercel.
+Next.js (App Router) + TypeScript strict, Tailwind CSS, Supabase (Postgres, Auth, Storage, RLS, pgvector), Anthropic SDK (`@anthropic-ai/sdk`), Zod, fast-xml-parser, Vitest, Playwright, Vercel.
 
 ## Commands
 
@@ -26,8 +26,7 @@ Added with milestone 1 (project scaffold).
 - **Every LLM output is validated with a Zod schema** before it is used or stored. A validation failure is an error state shown to the user, never silently ignored.
 - **FatturaPA XML is parsed, not prompted.** LLM extraction is for unstructured documents only (ADR 0002).
 - **Grounded answers:** the chat prompt answers only from retrieved context, cites the document, and says so when the answer is not there.
-- **No user login in the MVP** (ADR 0004). Do not add Supabase Auth, login pages or user/company tables.
-- **Data access is server-side only.** The browser never queries Supabase; Server Components, Server Actions and Route Handlers use the server-only key through `src/lib/supabase/`. Every new table enables RLS in the same migration with no policies for the `anon` and `authenticated` roles, so a leaked public key reads nothing. Files are served through short-lived signed URLs.
+- **Tenant isolation is enforced by RLS**, not by application filters alone. Every new table ships with its policies in the same migration.
 - **Database changes go through migrations** in `supabase/migrations/`, never through the dashboard.
 - **Test data is synthetic** (`fixtures/`). No real customer documents in the repository.
 

@@ -14,14 +14,14 @@ Small businesses keep contracts, quotes and invoices scattered across inboxes an
   - Italian e-invoices (FatturaPA XML) are parsed deterministically: no AI, no guesswork.
   - Unstructured documents (contracts, quotes, PDFs) are processed by an LLM with schema-validated output.
 - **Questions with sources.** "When does the Bianchi contract end?" → "31/03/2027 — *contratto_bianchi.pdf*, art. 4". When the answer is not in the documents, DocFlow says so.
-- **Private by default.** No user accounts in the MVP: the browser never queries the database, every read and write runs on the server, and an audit log records uploads, exports and corrections (see [ADR 0004](docs/decisions/0004-no-user-login-in-mvp.md)).
+- **Multi-tenant by design.** Each company sees only its own documents, enforced at database level (Row Level Security), with an access log.
 
 ## Tech stack
 
 | Area | Choice |
 |---|---|
 | Framework | Next.js (App Router), React, TypeScript (strict), Tailwind CSS |
-| Data | Supabase: Postgres, Storage, Row Level Security, pgvector |
+| Data | Supabase: Postgres, Auth, Storage, Row Level Security, pgvector |
 | AI | Anthropic Claude API, called server-side only |
 | Validation | Zod |
 | E-invoices | fast-xml-parser (FatturaPA) |

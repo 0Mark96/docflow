@@ -14,29 +14,30 @@ Next.js on Vercel ─────────────► Anthropic API (extr
    │  Server Actions        ─────► Embeddings provider (retrieval)
    ▼
 Supabase
+   ├─ Auth      (users, sessions)
    ├─ Postgres  (documents, extracted fields, chunks + pgvector, audit log)
    └─ Storage   (original files, private bucket)
 ```
 
-The browser talks only to the Next.js server. Every call to Supabase and to an AI provider happens on the server, where the keys live. There are no user accounts in the MVP (ADR 0004).
+The browser talks only to the Next.js server and to Supabase Auth. Every call to an AI provider happens on the server, where the API keys live.
 
 ## 1.1 Pages
 
-| Path | Name in the UI | Content |
-|---|---|---|
-| `/` | Home | What DocFlow does, in plain words, with a concrete example; leads to the upload |
-| `/documents` | File caricati | Upload and list of documents with their status |
-| `/documents/[id]` | Document detail | File name, type, status, extracted fields, download |
-| `/documents/table` | Tabella dati | Extracted fields of all documents, filter, sort, CSV export |
-| `/chat` | Chat | Questions with cited documents |
+| Path | Name in the UI | Access | Content |
+|---|---|---|---|
+| `/` | Login | Public | What DocFlow does, in plain words, with a concrete example, beside the email login form (the form stays the main action, visible without scrolling) |
+| `/documents` | File caricati | Logged in | Upload and list of the company's documents with their status |
+| `/documents/[id]` | Document detail | Logged in | File name, type, status, extracted fields, download |
+| `/documents/table` | Tabella dati | Logged in | Extracted fields of the company's documents, filter, sort, CSV export |
+| `/chat` | Chat | Logged in | Questions with cited documents |
 
-Filters and sort live in the URL query string, so going back from a document detail restores the list as it was. Styling uses Tailwind; form controls are shared components in `src/components/ui/` (no native `<select>`).
+A logged-out request to a private page redirects to `/`; a logged-in visit to `/` redirects to `/documents`. Filters and sort live in the URL query string, so going back from a document detail restores the list as it was. Styling uses Tailwind; form controls are shared components in `src/components/ui/` (no native `<select>`).
 
 ## 2. Data flows
 
 ### 2.1 Upload and extraction
 
-1. The user uploads a file. A Server Action validates type and size, stores the file in the private Storage bucket and creates a `documents` row with `status = 'processing'`.
+1. The user uploads a file. A Server Action validates type and size, stores the file in the company's Storage folder and creates a `documents` row with `status = 'processing'`.
 2. The file type decides the extractor:
    - **FatturaPA XML** → deterministic parser (`fast-xml-parser`), mapped to the `ExtractedFields` schema.
    - **PDF / TXT** → text extraction, then an LLM call with a JSON schema; the result is validated with Zod.
@@ -46,7 +47,7 @@ Filters and sort live in the URL query string, so going back from a document det
 ### 2.2 Questions with sources (RAG)
 
 1. The user asks a question in the chat.
-2. The server embeds the question and retrieves the most similar chunks (full-text search first, vector similarity later).
+2. The server embeds the question and retrieves the most similar chunks of **the user's company only** (vector similarity, with RLS applied).
 3. The server sends the model a system prompt (answer only from context, cite sources, say when not found), the retrieved chunks and the question.
 4. The answer is returned with the cited documents as links.
 
@@ -56,15 +57,16 @@ Retrieval starts with Postgres full-text search and moves to vector search (pgve
 
 | Table | Key columns | Notes |
 |---|---|---|
-| `documents` | `id`, `file_path`, `file_name`, `kind`, `status`, `error`, `created_at` | `kind`: `fatturapa`, `pdf`, `text` |
-| `extracted_fields` | `document_id`, `supplier`, `amount`, `currency`, `due_date`, `source`, `confidence`, `corrected_at` | One row per document (MVP) |
-| `document_chunks` | `id`, `document_id`, `content`, `embedding` | |
-| `audit_log` | `id`, `action`, `target_id`, `created_at` | Append-only |
+| `companies` | `id`, `name` | Tenant |
+| `profiles` | `user_id`, `company_id` | One company per user (MVP) |
+| `documents` | `id`, `company_id`, `file_path`, `kind`, `status`, `error`, `created_by`, `created_at` | `kind`: `fatturapa`, `pdf`, `text` |
+| `extracted_fields` | `document_id`, `supplier`, `amount`, `currency`, `due_date`, `source`, `confidence`, `corrected_by` | One row per document (MVP) |
+| `document_chunks` | `id`, `document_id`, `company_id`, `content`, `embedding` | `company_id` denormalized for RLS and filtering |
+| `audit_log` | `id`, `company_id`, `user_id`, `action`, `target_id`, `created_at` | Append-only |
 
 ## 4. Security
 
-- **Access (ADR 0004):** no login. The browser never queries Supabase: all data access runs on the server with a server-only key. RLS is enabled on every table with no policies for the `anon` and `authenticated` roles, and the Storage bucket is private; files are served through short-lived signed URLs.
-- **Deployed app:** protected at the hosting level (Vercel Deployment Protection or an equivalent password gate), because anyone who can open the app can see every document.
+- **Tenant isolation:** RLS on every table, `company_id = current user's company`. Storage paths are prefixed by `company_id` with matching Storage policies.
 - **Secrets:** server-only environment variables; `.env.example` documents them without values.
 - **Input validation:** Zod on every Server Action and Route Handler input.
 - **LLM output:** schema-validated; never executed, never rendered as HTML.
