@@ -8,7 +8,7 @@
 
 ## In plain words
 
-<!-- For a reader who knows little Next.js: which files changed, why, and what happens from the user's click to the result. Five to ten lines, no jargon without a one-line explanation. -->
+<!-- For a reviewer who has not read the code: which files changed, why, and what happens from the user's click to the result. Five to ten lines, no jargon without a one-line explanation. -->
 
 ## How to verify
 
