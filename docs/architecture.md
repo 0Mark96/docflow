@@ -5,7 +5,7 @@ Status: **as designed**. Update this document when the implementation diverges.
 ## 1. Overview
 
 ```
-Browser (React)
+Browser (React, Tailwind CSS)
    │  HTTPS
    ▼
 Next.js on Vercel ─────────────► Anthropic API (extraction, answers)
@@ -20,6 +20,18 @@ Supabase
 ```
 
 The browser talks only to the Next.js server and to Supabase Auth. Every call to an AI provider happens on the server, where the API keys live.
+
+## 1.1 Pages
+
+| Path | Name in the UI | Access | Content |
+|---|---|---|---|
+| `/` | Login | Public | What DocFlow does, in plain words, with a concrete example, beside the email login form (the form stays the main action, visible without scrolling) |
+| `/documents` | File caricati | Logged in | Upload and list of the company's documents with their status |
+| `/documents/[id]` | Document detail | Logged in | File name, type, status, extracted fields, download |
+| `/documents/table` | Tabella dati | Logged in | Extracted fields of the company's documents, filter, sort, CSV export |
+| `/chat` | Chat | Logged in | Questions with cited documents |
+
+A logged-out request to a private page redirects to `/`; a logged-in visit to `/` redirects to `/documents`. Filters and sort live in the URL query string, so going back from a document detail restores the list as it was. Styling uses Tailwind utility classes only (ADR 0005); form controls are shared components in `src/components/ui/` (no native `<select>`).
 
 ## 2. Data flows
 

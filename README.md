@@ -20,7 +20,7 @@ Small businesses keep contracts, quotes and invoices scattered across inboxes an
 
 | Area | Choice |
 |---|---|
-| Framework | Next.js (App Router), React, TypeScript (strict) |
+| Framework | Next.js (App Router), React, TypeScript (strict), Tailwind CSS |
 | Data | Supabase: Postgres, Auth, Storage, Row Level Security, pgvector |
 | AI | Anthropic Claude API, called server-side only |
 | Validation | Zod |
