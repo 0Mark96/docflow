@@ -14,7 +14,7 @@ A Next.js + TypeScript strict application that runs locally, with linting, type-
 4. Add Vitest with one sample test for a utility in `src/lib/`; script `test`.
 5. Add `.env.example` (empty for now, with a header comment explaining the convention).
 6. Add `.github/workflows/ci.yml`: on pull request, install with `npm ci`, run `lint`, `type-check`, `test`.
-7. Replace the default home page with a minimal DocFlow landing (product name, one-line description).
+7. Replace the default home page with a minimal DocFlow placeholder (product name, one-line description). The real home page comes in M2.
 8. Update `README.md` (Getting started) and the Commands section of `CLAUDE.md`.
 
 ## Verification

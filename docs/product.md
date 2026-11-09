@@ -15,18 +15,18 @@
 
 | Feature | Description | Acceptance criterion |
 |---|---|---|
-| Document upload | PDF, TXT and FatturaPA XML; stored per company | A user sees their uploaded documents after reload, never another company's |
+| Home | First page: explains in plain words what DocFlow does, with a concrete example, and leads to the upload | A first-time visitor can say what the app is for after reading it |
+| Document upload ("File caricati") | PDF, TXT and FatturaPA XML in private storage; list and document detail page | Uploaded documents are still listed after reload; going back from a document restores the list position |
 | Structured extraction | Supplier, document type, amount, due date | FatturaPA: 100% field accuracy on the fixture set. Unstructured: ≥ 90% on the eval set |
-| Data table | Filter, sort and export (CSV) of extracted data | Exported CSV matches the table |
-| Questions with sources | Chat over the company's documents | Every answer cites at least one document; out-of-scope questions get an explicit "not found" |
-| Authentication | Email login, one company per user | Unauthenticated requests receive 401 |
+| Data table ("Tabella dati") | Filter, sort and export (CSV) of extracted data, on its own page | Exported CSV matches the table; going back from a document restores filters, sort and position |
+| Questions with sources | Chat over the uploaded documents | Every answer cites at least one document; out-of-scope questions get an explicit "not found" |
 
 ## Out of scope (MVP)
 
 - Accounting or ERP features (payments, bookkeeping, sending invoices to SdI).
 - OCR of handwritten documents.
 - Editing documents.
-- Multiple companies per user, fine-grained roles (planned after MVP, see roadmap).
+- User accounts, login, multiple companies and roles (ADR 0004; planned after MVP, see roadmap).
 
 ## Quality and trust
 

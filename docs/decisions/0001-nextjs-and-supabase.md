@@ -1,6 +1,6 @@
 # 0001. Next.js and Supabase as application platform
 
-- Status: accepted
+- Status: accepted; the authentication and tenancy parts are superseded by [0004](0004-no-user-login-in-mvp.md)
 - Date: 2026-11-06
 
 ## Context
