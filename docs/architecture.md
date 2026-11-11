@@ -70,18 +70,24 @@ Retrieval starts with Postgres full-text search and moves to vector search (pgve
 - **Secrets:** server-only environment variables; `.env.example` documents them without values.
 - **Input validation:** Zod on every Server Action and Route Handler input.
 - **LLM output:** schema-validated; never executed, never rendered as HTML.
-- **Data sent to AI providers:** only the document text needed for the task. Provider data-retention terms are documented for customers (open point, see roadmap).
+- **Data sent to AI providers (ADR 0008):** only the document text needed for the task; never user emails, file names or identifiers. FatturaPA XML never reaches a model.
+- **Logs:** identifiers, token counts, durations and error codes only; never prompts, document text or model output.
+- **Deletion:** deleting a document removes its file, `extracted_fields` row and `document_chunks`.
+- **Sub-processors:** a public page lists every external service that receives customer data, what for and where.
 - **Audit:** uploads, deletions, exports and corrections are written to `audit_log`.
 
 ## 5. Quality
 
 - **Unit tests** (Vitest): parser, schemas, utilities.
-- **LLM evals** (Vitest, separate command): a versioned fixture set with expected fields and answers; reports accuracy per field. Run before changing prompts or models.
+- **LLM evals** (Vitest, separate command, `fixtures/evals/`): synthetic documents, each with an expected-fields file. The set covers hard cases (scanned or skewed PDFs, several dates in one document, amounts with and without VAT, missing fields).
+  - Values are compared after normalization (amounts in cents, ISO dates, ISO currency, cleaned supplier name); amounts must match exactly.
+  - The report gives accuracy **per field** and counts **invented values** (a value returned where the expected one is empty) separately, with a threshold of zero.
+  - Each run is saved with model ID and prompt version, so a regression on one field is visible even when the total improves.
 - **End-to-end** (Playwright): upload → table → question, against a test Supabase project.
-- **CI** (GitHub Actions): lint, type-check, unit tests on every pull request. Evals run on demand.
+- **CI** (GitHub Actions): lint, type-check, unit tests on every pull request. Evals run automatically on pull requests that change prompts, model IDs or the extraction schema, and block the merge when a field drops below its threshold.
 
 ## 6. Open points
 
 - Embeddings provider (Anthropic does not offer an embeddings model): choose in M4 with an ADR.
-- Data residency: Supabase EU region; document the AI provider's data handling for customers.
+- Data residency: Supabase EU region; the AI providers' retention terms are recorded in the sub-processor list before production (ADR 0008).
 - PDF text extraction library and handling of scanned PDFs (OCR) — decided in M3.
