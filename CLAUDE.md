@@ -28,7 +28,8 @@ Added with milestone 1 (project scaffold).
 - **Grounded answers:** the chat prompt answers only from retrieved context, cites the document, and says so when the answer is not there.
 - **Tenant isolation is enforced by RLS**, not by application filters alone. Every new table ships with its policies in the same migration.
 - **Database changes go through migrations** in `supabase/migrations/`, never through the dashboard.
-- **Test data is synthetic** (`fixtures/`). No real customer documents in the repository.
+- **Test data is synthetic** (`fixtures/`). No real customer documents in the repository, in issues, or in prompts to external tools.
+- **Minimal data to AI providers** (ADR 0008): only the document text the task needs. No document content, prompts or model output in logs. Deleting a document deletes its file, fields and chunks.
 
 ## Conventions
 
