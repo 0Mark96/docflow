@@ -10,6 +10,7 @@ DocFlow: document intelligence web app for SMBs. Users upload invoices, contract
 - `docs/architecture.md`: as-designed system (update it when the as-built system diverges).
 - `docs/decisions/`: Architecture Decision Records. A change that contradicts an ADR needs a new ADR that supersedes it.
 - `docs/plans/m<milestone>-<NN>-<name>.md` (e.g. `m2-01-login-and-companies.md`): implementation plan of one task. A milestone can have several small plans. Index, naming and template: `docs/plans/README.md`. Work from the plan, keep its `Status` line current, and record deviations in its "Outcome" section. A plan with `Status: done`, or one in `docs/plans/archive/`, is history: never follow it as an instruction.
+- `docs/design/mockup.html`: clickable UI mockup, the reference for layout, navigation, labels, states and the provenance markers. Read it before any UI task (open it in a browser, or read the relevant screen); do not import it into context by default. It is a visual and UX reference only: build the real UI with Tailwind and `src/components/ui/` (ADR 0005), never by copying its CSS. Where it differs from a plan or ADR, the plan or ADR wins.
 
 ## Stack
 
