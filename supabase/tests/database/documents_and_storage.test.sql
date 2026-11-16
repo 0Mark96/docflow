@@ -2,7 +2,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(15);
+select plan(16);
 
 -- Two synthetic users: the sign-up trigger creates a company for each.
 insert into auth.users (id, email, raw_user_meta_data)
@@ -76,21 +76,30 @@ select is((select count(*)::int from storage.objects where bucket_id = 'document
   'another company sees no files');
 
 delete from public.documents;
-delete from storage.objects where bucket_id = 'documents';
 
 -- Back to user one.
 select set_config('request.jwt.claims', '{"sub":"bbbbbbbb-0000-4000-8000-000000000001","role":"authenticated"}', true);
 
-select is(
-  (select count(*)::int from public.documents) + (select count(*)::int from storage.objects where bucket_id = 'documents'),
-  2, 'another company cannot delete the document or its file');
+select is((select count(*)::int from public.documents), 1,
+  'another company cannot delete the document');
 
-delete from storage.objects where bucket_id = 'documents';
 delete from public.documents;
 
-select is(
-  (select count(*)::int from public.documents) + (select count(*)::int from storage.objects where bucket_id = 'documents'),
-  0, 'a user deletes their document and its file');
+select is((select count(*)::int from public.documents), 0, 'a user deletes their document');
+
+-- Storage blocks DELETE statements on its tables (files are removed through the
+-- Storage API), so the delete rule for files is checked on the policy itself.
+reset role;
+select ok(
+  exists (
+    select 1 from pg_policies
+    where schemaname = 'storage' and tablename = 'objects' and cmd = 'DELETE'
+      and 'authenticated' = any (roles)
+      and qual like '%bucket_id = ''documents''%'
+      and qual like '%current_company_id()%'
+  ),
+  'files can be deleted only in the company folder');
+set local role authenticated;
 
 -- Act as a logged-out visitor.
 reset role;
