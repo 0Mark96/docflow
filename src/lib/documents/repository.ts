@@ -1,4 +1,5 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient as UntypedClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
 import { z } from "zod";
 import { DocumentError } from "./errors";
 import {
@@ -7,6 +8,8 @@ import {
   MAX_UPLOAD_BYTES,
   type Document,
   type DocumentCounts,
+  type DocumentKind,
+  type DocumentStatus,
   type DocumentList,
   type ListDocumentsQuery,
 } from "./types";
@@ -22,6 +25,8 @@ import {
  * Data access for documents. Every function receives a Supabase client acting
  * as the logged-in user, so RLS limits it to the user's company.
  */
+
+type SupabaseClient = UntypedClient<Database>;
 
 export const BUCKET = "documents";
 const SIGNED_URL_SECONDS = 60;
@@ -71,12 +76,13 @@ function assertId(id: string): void {
 
 async function countDocuments(
   supabase: SupabaseClient,
-  filter?: { column: "kind" | "status"; value: string },
+  filter: { kind?: DocumentKind; status?: DocumentStatus } = {},
 ): Promise<number> {
   let query = supabase
     .from("documents")
     .select("id", { count: "exact", head: true });
-  if (filter) query = query.eq(filter.column, filter.value);
+  if (filter.kind) query = query.eq("kind", filter.kind);
+  if (filter.status) query = query.eq("status", filter.status);
   const { count, error } = await query;
   if (error) throw error;
   return count ?? 0;
@@ -85,10 +91,10 @@ async function countDocuments(
 async function getCounts(supabase: SupabaseClient): Promise<DocumentCounts> {
   const [all, fatturapa, pdf, text, failed] = await Promise.all([
     countDocuments(supabase),
-    countDocuments(supabase, { column: "kind", value: "fatturapa" }),
-    countDocuments(supabase, { column: "kind", value: "pdf" }),
-    countDocuments(supabase, { column: "kind", value: "text" }),
-    countDocuments(supabase, { column: "status", value: "failed" }),
+    countDocuments(supabase, { kind: "fatturapa" }),
+    countDocuments(supabase, { kind: "pdf" }),
+    countDocuments(supabase, { kind: "text" }),
+    countDocuments(supabase, { status: "failed" }),
   ]);
   return { all, fatturapa, pdf, text, failed };
 }

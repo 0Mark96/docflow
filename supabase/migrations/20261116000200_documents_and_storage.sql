@@ -36,6 +36,10 @@ create index documents_company_created_at_idx
 
 alter table public.documents enable row level security;
 
+-- Logged-out visitors get no access at all; logged-in users cannot update (see below).
+revoke all on public.documents from anon;
+revoke update, truncate on public.documents from authenticated;
+
 create policy "documents: members read their company's documents"
   on public.documents for select
   to authenticated
@@ -54,8 +58,8 @@ create policy "documents: members delete their company's documents"
   to authenticated
   using (company_id = public.current_company_id());
 
--- No update policy: status and errors are written by the extraction pipeline (M3),
--- which adds its own policy or runs with server-side privileges.
+-- No update grant or policy: status and errors are written by the extraction
+-- pipeline (M3), which adds its own policy or runs with server-side privileges.
 
 -- Storage --------------------------------------------------------------------
 

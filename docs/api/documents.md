@@ -40,7 +40,7 @@ Status: in M2 every document stays `uploaded`. `processing`, `ready` and `failed
 
 `total` counts the documents matching the filters. `counts` is `{ all, fatturapa, pdf, text, failed }` over the whole company, independent of the filters, for the tabs of the list.
 
-Server Components do not call the API over HTTP: they import `listDocuments` and `getDocument` from `src/lib/documents/service.ts`, which return the same shapes.
+Server Components do not call the API over HTTP: they import `listDocuments` and `getDocument` from `src/lib/documents/service.ts`, which return the same shapes. `getDocument(id)` returns `null` when the document does not exist or belongs to another company; `listDocuments(searchParams)` accepts the raw search params of the page and replaces missing or invalid values with the defaults. Both throw `DocumentError` (`src/lib/documents/errors.ts`) with code `unauthenticated` without a session.
 
 ## Errors
 

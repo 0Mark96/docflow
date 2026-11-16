@@ -53,6 +53,60 @@ export type Database = {
         };
         Relationships: [];
       };
+      documents: {
+        Row: {
+          company_id: string;
+          content_sha256: string;
+          created_at: string;
+          created_by: string | null;
+          error_message: string | null;
+          file_name: string;
+          file_path: string;
+          id: string;
+          kind: Database["public"]["Enums"]["document_kind"];
+          mime_type: string;
+          size_bytes: number;
+          status: Database["public"]["Enums"]["document_status"];
+        };
+        ComputedFields: never;
+        Insert: {
+          company_id?: string;
+          content_sha256: string;
+          created_at?: string;
+          created_by?: string | null;
+          error_message?: string | null;
+          file_name: string;
+          file_path: string;
+          id?: string;
+          kind: Database["public"]["Enums"]["document_kind"];
+          mime_type: string;
+          size_bytes: number;
+          status?: Database["public"]["Enums"]["document_status"];
+        };
+        Update: {
+          company_id?: string;
+          content_sha256?: string;
+          created_at?: string;
+          created_by?: string | null;
+          error_message?: string | null;
+          file_name?: string;
+          file_path?: string;
+          id?: string;
+          kind?: Database["public"]["Enums"]["document_kind"];
+          mime_type?: string;
+          size_bytes?: number;
+          status?: Database["public"]["Enums"]["document_status"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "documents_company_id_fkey";
+            columns: ["company_id"];
+            isOneToOne: false;
+            referencedRelation: "companies";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           company_id: string;
@@ -88,7 +142,8 @@ export type Database = {
       current_company_id: { Args: Record<PropertyKey, never>; Returns: string };
     };
     Enums: {
-      [_ in never]: never;
+      document_kind: "fatturapa" | "pdf" | "text";
+      document_status: "uploaded" | "processing" | "ready" | "failed";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -218,6 +273,9 @@ export const Constants = {
     Enums: {},
   },
   public: {
-    Enums: {},
+    Enums: {
+      document_kind: ["fatturapa", "pdf", "text"],
+      document_status: ["uploaded", "processing", "ready", "failed"],
+    },
   },
 } as const;
