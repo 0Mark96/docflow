@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Design tokens from docs/design/mockup.html. Use them as Tailwind classes,
+ * e.g. bg-accent, text-muted, border-line, text-ok.
+ * The app is light only, as in the mockup.
+ */
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #141821;
+  --color-panel: #f6f7fa;
+  --color-side: #f8f9fc;
+  --color-line: #e6e8ee;
+  --color-line-strong: #d4d8e1;
+  --color-muted: #5f6675;
+  --color-faint: #8a909c;
+  --color-accent: #2745c7;
+  --color-accent-hover: #1e39ab;
+  --color-accent-soft: #edf0fc;
+  --color-accent-line: #c9d2f6;
+  --color-ok: #147447;
+  --color-ok-soft: #e8f5ee;
+  --color-ai: #a05600;
+  --color-ai-soft: #fdf2e1;
+  --color-err: #bd2618;
+  --color-err-hover: #a01f13;
+  --color-err-soft: #fdeceb;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist-sans), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --shadow-card: 0 1px 2px rgb(20 24 33 / 0.04);
+  --shadow-pop: 0 12px 40px rgb(20 24 33 / 0.18);
+
+  --animate-pulse-dot: pulse-dot 1.2s ease-in-out infinite;
+  --animate-slide: slide 1.3s ease-in-out infinite;
+  --animate-flash: flash 1.6s ease-out;
+  --animate-rise: rise 0.18s ease-out;
+
+  @keyframes pulse-dot {
+    50% {
+      opacity: 0.25;
+    }
+  }
+  @keyframes slide {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(250%);
+    }
+  }
+  @keyframes flash {
+    0% {
+      background-color: var(--color-accent-soft);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  @keyframes rise {
+    0% {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
+html {
+  color-scheme: light;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
 }

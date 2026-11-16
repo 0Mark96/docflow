@@ -23,9 +23,11 @@ Next.js (App Router) + TypeScript strict, Tailwind CSS, Supabase (Postgres, Auth
 - `npm run lint`: ESLint.
 - `npm run type-check`: generates Next.js route types (`next typegen`, needed for `LayoutProps`/`PageProps` on a clean checkout), then runs TypeScript with no emit.
 - `npm test`: Vitest, single run. `npm run test:watch` for watch mode.
+- `npx supabase start` / `stop`: local Supabase (Docker) with migrations and `supabase/seed.sql`; login emails go to Mailpit at `http://127.0.0.1:54324`.
+- `npx supabase test db`: pgTAP tests in `supabase/tests/` (RLS and tenant isolation). `npx supabase gen types typescript > src/lib/supabase/database.types.ts` after a migration.
 - `npm run format` / `npm run format:check`: write / verify Prettier formatting (Markdown and `docs/` are excluded).
 
-CI (`.github/workflows/ci.yml`) runs `npm ci`, `lint`, `type-check` and `test` on every pull request. A pre-commit hook (Husky + lint-staged) lints and formats staged files and runs `type-check`.
+CI (`.github/workflows/ci.yml`) runs `npm ci`, `lint`, `type-check` and `test` on every pull request; `.github/workflows/db.yml` runs the database tests when `supabase/` changes. A pre-commit hook (Husky + lint-staged) lints and formats staged files and runs `type-check`.
 
 ## Non-negotiable rules
 
