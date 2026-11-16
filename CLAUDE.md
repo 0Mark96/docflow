@@ -21,7 +21,7 @@ Next.js (App Router) + TypeScript strict, Tailwind CSS, Supabase (Postgres, Auth
 - `npm run dev`: development server at `http://localhost:3000`.
 - `npm run build` / `npm start`: production build and server.
 - `npm run lint`: ESLint.
-- `npm run type-check`: TypeScript, no emit.
+- `npm run type-check`: generates Next.js route types (`next typegen`, needed for `LayoutProps`/`PageProps` on a clean checkout), then runs TypeScript with no emit.
 - `npm test`: Vitest, single run. `npm run test:watch` for watch mode.
 - `npm run format` / `npm run format:check`: write / verify Prettier formatting (Markdown and `docs/` are excluded).
 
