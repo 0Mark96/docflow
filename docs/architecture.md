@@ -35,6 +35,13 @@ A logged-out request to a private page redirects to `/`; a logged-in visit to `/
 
 ## 2. Data flows
 
+### 2.0 Login
+
+1. On `/` the user enters their email. A Server Action asks Supabase Auth to send a one-time link (valid 15 minutes, no password).
+2. The link opens `/auth/confirm`, which exchanges the token for a session cookie and redirects to `/documents`. An expired or reused link returns to `/` with an error message.
+3. The first login of a new email creates the user, and a database trigger creates their company and profile.
+4. `src/proxy.ts` refreshes the session on every request and redirects between public and private pages. Pages and API routes read the user with `getCurrentUser()` / `requireUser()`; the database still enforces RLS with `current_company_id()`.
+
 ### 2.1 Upload and extraction
 
 1. The user uploads a file to `POST /api/documents` (contract: [`api/documents.md`](api/documents.md)). The Route Handler checks size (4 MB) and type from the content, rejects a file whose SHA-256 is already stored in the company, stores the file at `<company_id>/<document_id>.<ext>` in the private `documents` bucket and creates a `documents` row with `status = 'uploaded'`; extraction then moves it to `processing`.

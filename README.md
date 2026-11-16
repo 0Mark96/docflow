@@ -36,16 +36,17 @@ Start from [`docs/README.md`](docs/README.md).
 
 ## Getting started
 
-Requirements: Node.js 24 and npm.
+Requirements: Node.js 24, npm and Docker (for the local Supabase stack).
 
 ```bash
 git clone https://github.com/0Mark96/docflow.git
 cd docflow
 npm install
-cp .env.example .env.local   # no variables are required yet
+npx supabase start           # local Postgres, Auth, Storage and Mailpit, with migrations and seed
+cp .env.example .env.local   # fill in API_URL and PUBLISHABLE_KEY printed by `npx supabase status`
 npm run dev
 ```
 
-The app runs at <http://localhost:3000>. `npm install` also installs a Git pre-commit hook that lints and formats staged files and type-checks the project.
+The app runs at <http://localhost:3000>. Log in with a synthetic seed user (`anna@officina-esempio.test` or `luca@studio-demo.test`, two different companies) or any email: the login link arrives in the local mailbox at <http://127.0.0.1:54324>. `npx supabase test db` runs the database tests; `npx supabase stop` stops the stack. `npm install` also installs a Git pre-commit hook that lints and formats staged files and type-checks the project.
 
 Common scripts: `npm run lint`, `npm run type-check`, `npm test`, `npm run format`. The full list is in [`CLAUDE.md`](CLAUDE.md#commands).
