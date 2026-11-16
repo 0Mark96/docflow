@@ -62,14 +62,29 @@ export const listDocumentsQuerySchema = z.object({
     .min(1)
     .max(MAX_PAGE_SIZE)
     .default(DEFAULT_PAGE_SIZE),
+  /** Optional filters, applied before pagination. */
+  kind: documentKindSchema.optional(),
+  status: documentStatusSchema.optional(),
 });
 export type ListDocumentsQuery = z.infer<typeof listDocumentsQuerySchema>;
 
+/** Counts over the whole company, independent of the filters (tabs of the list). */
+export const documentCountsSchema = z.object({
+  all: z.number().int().nonnegative(),
+  fatturapa: z.number().int().nonnegative(),
+  pdf: z.number().int().nonnegative(),
+  text: z.number().int().nonnegative(),
+  failed: z.number().int().nonnegative(),
+});
+export type DocumentCounts = z.infer<typeof documentCountsSchema>;
+
 export const documentListSchema = z.object({
   documents: z.array(documentSchema),
+  /** Documents matching the filters, before pagination. */
   total: z.number().int().nonnegative(),
   page: z.number().int().min(1),
   pageSize: z.number().int().min(1),
+  counts: documentCountsSchema,
 });
 export type DocumentList = z.infer<typeof documentListSchema>;
 
@@ -80,6 +95,7 @@ export const apiErrorCodeSchema = z.enum([
   "file_empty",
   "file_too_large",
   "unsupported_type",
+  "duplicate_file",
   "not_found",
   "server_error",
 ]);
@@ -90,6 +106,8 @@ export const apiErrorSchema = z.object({
   error: z.object({
     code: apiErrorCodeSchema,
     message: z.string(),
+    /** Only with `duplicate_file`: the document that already has the same content. */
+    existingDocumentId: z.uuid().optional(),
   }),
 });
 export type ApiError = z.infer<typeof apiErrorSchema>;
