@@ -36,4 +36,16 @@ Start from [`docs/README.md`](docs/README.md).
 
 ## Getting started
 
-Setup instructions will be added with milestone 1 (project scaffold).
+Requirements: Node.js 24 and npm.
+
+```bash
+git clone https://github.com/0Mark96/docflow.git
+cd docflow
+npm install
+cp .env.example .env.local   # no variables are required yet
+npm run dev
+```
+
+The app runs at <http://localhost:3000>. `npm install` also installs a Git pre-commit hook that lints and formats staged files and type-checks the project.
+
+Common scripts: `npm run lint`, `npm run type-check`, `npm test`, `npm run format`. The full list is in [`CLAUDE.md`](CLAUDE.md#commands).
