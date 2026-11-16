@@ -24,8 +24,9 @@ Planned tasks (files are written by the task itself, before the code):
 | Plan | Milestone | Depends on |
 |---|---|---|
 | [`m1-01-project-scaffold`](m1-01-project-scaffold.md) | M1 | none |
-| `m2-01-login-documents-and-storage` | M2 | m1-01 |
-| `m2-02-login-page` | M2 | m2-01 |
+| `m2-01-login-and-companies` | M2 | m1-01 |
+| [`m2-02-documents-and-storage`](m2-02-documents-and-storage.md) | M2 | m2-01 |
+| `m2-03-uploaded-files-page` | M2 | m2-02 |
 | `m3-01-extraction-contract` | M3 | m2-01 |
 | `m3-02-fatturapa-parser` | M3 | m3-01 |
 | `m3-03-llm-extraction` | M3 | m3-01 |
@@ -42,13 +43,13 @@ Planned tasks (files are written by the task itself, before the code):
 
 ## Waves: what can run in parallel
 
-A wave starts when the pull requests of the previous wave are merged. Plans in the same wave touch different files and can be worked on at the same time. Until M3, work one plan at a time.
+A wave starts when the pull requests of the previous wave are merged. Plans in the same wave touch different files and can be worked on at the same time.
 
 | Wave | Plans | Mode |
 |---|---|---|
 | 1 | m1-01 | alone |
-| 2 | m2-01 | alone |
-| 3 | m2-02 (login page), m3-01 (extraction contract) | parallel |
+| 2 | m2-01 (login and companies), m2-02 (documents and storage), m2-03 ("File caricati" page) | parallel, against shared contracts: m2-01 owns the Supabase clients and `getCurrentUser()`, m2-02 owns the documents API (`docs/api/documents.md`); merged in that order |
+| 3 | m3-01 (extraction contract) | alone |
 | 4 | m3-02, m3-03, m3-04, m6-01 | parallel |
 | 5 | m3-05 (extraction pipeline) | alone: it joins m3-02, m3-03 and m3-04 |
 | 6 | m4-01, m4-02 | parallel |

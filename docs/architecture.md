@@ -37,7 +37,7 @@ A logged-out request to a private page redirects to `/`; a logged-in visit to `/
 
 ### 2.1 Upload and extraction
 
-1. The user uploads a file. A Server Action validates type and size, stores the file in the company's Storage folder and creates a `documents` row with `status = 'processing'`.
+1. The user uploads a file to `POST /api/documents` (contract: [`api/documents.md`](api/documents.md)). The Route Handler checks size (4 MB) and type from the content, rejects a file whose SHA-256 is already stored in the company, stores the file at `<company_id>/<document_id>.<ext>` in the private `documents` bucket and creates a `documents` row with `status = 'uploaded'`; extraction then moves it to `processing`.
 2. The file type decides the extractor:
    - **FatturaPA XML** → deterministic parser (`fast-xml-parser`), mapped to the `ExtractedFields` schema.
    - **PDF / TXT** → text extraction, then an LLM call with a JSON schema; the result is validated with Zod.
@@ -59,7 +59,7 @@ Retrieval starts with Postgres full-text search and moves to vector search (pgve
 |---|---|---|
 | `companies` | `id`, `name` | Tenant |
 | `profiles` | `user_id`, `company_id` | One company per user (MVP) |
-| `documents` | `id`, `company_id`, `file_path`, `kind`, `status`, `error`, `created_by`, `created_at` | `kind`: `fatturapa`, `pdf`, `text` |
+| `documents` | `id`, `company_id`, `file_path`, `file_name`, `mime_type`, `size_bytes`, `content_sha256`, `kind`, `status`, `error_message`, `created_by`, `created_at` | `kind`: `fatturapa`, `pdf`, `text`; `status`: `uploaded`, `processing`, `ready`, `failed`; content hash unique per company |
 | `extracted_fields` | `document_id`, `supplier`, `amount`, `currency`, `due_date`, `source`, `confidence`, `corrected_by` | One row per document (MVP) |
 | `document_chunks` | `id`, `document_id`, `company_id`, `content`, `embedding` | `company_id` denormalized for RLS and filtering |
 | `audit_log` | `id`, `company_id`, `user_id`, `action`, `target_id`, `created_at` | Append-only |
