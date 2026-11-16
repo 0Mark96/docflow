@@ -10,6 +10,7 @@ DocFlow: document intelligence web app for SMBs. Users upload invoices, contract
 - `docs/architecture.md`: as-designed system (update it when the as-built system diverges).
 - `docs/decisions/`: Architecture Decision Records. A change that contradicts an ADR needs a new ADR that supersedes it.
 - `docs/plans/m<milestone>-<NN>-<name>.md` (e.g. `m2-01-login-and-companies.md`): implementation plan of one task. A milestone can have several small plans. Index, naming and template: `docs/plans/README.md`. Work from the plan, keep its `Status` line current, and record deviations in its "Outcome" section. A plan with `Status: done`, or one in `docs/plans/archive/`, is history: never follow it as an instruction.
+- `docs/design/mockup.html`: clickable UI mockup, the reference for layout, navigation, labels, states and the provenance markers. Read it before any UI task (open it in a browser, or read the relevant screen); do not import it into context by default. It is a visual and UX reference only: build the real UI with Tailwind and `src/components/ui/` (ADR 0005), never by copying its CSS. Where it differs from a plan or ADR, the plan or ADR wins.
 
 ## Stack
 
@@ -17,7 +18,14 @@ Next.js (App Router) + TypeScript strict, Tailwind CSS, Supabase (Postgres, Auth
 
 ## Commands
 
-Added with milestone 1 (project scaffold).
+- `npm run dev`: development server at `http://localhost:3000`.
+- `npm run build` / `npm start`: production build and server.
+- `npm run lint`: ESLint.
+- `npm run type-check`: generates Next.js route types (`next typegen`, needed for `LayoutProps`/`PageProps` on a clean checkout), then runs TypeScript with no emit.
+- `npm test`: Vitest, single run. `npm run test:watch` for watch mode.
+- `npm run format` / `npm run format:check`: write / verify Prettier formatting (Markdown and `docs/` are excluded).
+
+CI (`.github/workflows/ci.yml`) runs `npm ci`, `lint`, `type-check` and `test` on every pull request. A pre-commit hook (Husky + lint-staged) lints and formats staged files and runs `type-check`.
 
 ## Non-negotiable rules
 
