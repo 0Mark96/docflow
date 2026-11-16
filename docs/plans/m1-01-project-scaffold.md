@@ -2,7 +2,7 @@
 
 - Milestone: M1
 - Depends on: none
-- Status: in progress
+- Status: done
 - Branch: `feature/project-scaffold` from `main`
 
 ## Goal
@@ -40,4 +40,5 @@ All eight tasks done. Deviations from the plan:
 - **Prettier ignores `*.md` and `docs/`** so that tables in the documentation are not reflowed. An extra `format:check` script verifies formatting without writing.
 - **VS Code settings** (`.vscode/settings.json`, `extensions.json`): format on save with Prettier, ESLint fixes on save.
 - **Pre-commit hook** (Husky + lint-staged): lints and formats staged files and runs `type-check`. Tests are left to CI to keep commits fast.
+- **`type-check` runs `next typegen` first.** The first CI run failed with `TS2304: Cannot find name 'LayoutProps'`: Next.js generates those global types on `dev`/`build`, so they were missing on a clean checkout. Fixed in a follow-up PR; the PR of this plan had been merged with a red check.
 - The home page copy is in Italian and the document language is `it`, since the product targets Italian users.
