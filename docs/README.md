@@ -6,7 +6,8 @@ Read in this order:
 2. [`architecture.md`](architecture.md): components, data flows, data model, security.
 3. [`roadmap.md`](roadmap.md): milestones and their exit criteria.
 4. [`decisions/`](decisions/): why the main technical choices were made.
-5. [`plans/`](plans/): implementation plan of each task, with its status and outcome. Start from [`plans/README.md`](plans/README.md).
-6. [`design/mockup.html`](design/mockup.html): clickable UI mockup (open it in a browser). Reference for screens, labels, states and provenance markers; it uses synthetic data and is not production code.
+5. [`costs.md`](costs.md): who pays what, cost estimate per customer and cost controls.
+6. [`plans/`](plans/): implementation plan of each task, with its status and outcome. Start from [`plans/README.md`](plans/README.md).
+7. [`design/mockup.html`](design/mockup.html): clickable UI mockup (open it in a browser). Reference for screens, labels, states and provenance markers; it uses synthetic data and is not production code.
 
 **Authority.** ADRs are binding until superseded by a newer ADR. `architecture.md` describes the system as designed and is updated when the built system diverges. Plans describe one task and are not updated after the task is merged.
