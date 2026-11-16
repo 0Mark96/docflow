@@ -18,7 +18,14 @@ Next.js (App Router) + TypeScript strict, Tailwind CSS, Supabase (Postgres, Auth
 
 ## Commands
 
-Added with milestone 1 (project scaffold).
+- `npm run dev`: development server at `http://localhost:3000`.
+- `npm run build` / `npm start`: production build and server.
+- `npm run lint`: ESLint.
+- `npm run type-check`: TypeScript, no emit.
+- `npm test`: Vitest, single run. `npm run test:watch` for watch mode.
+- `npm run format` / `npm run format:check`: write / verify Prettier formatting (Markdown and `docs/` are excluded).
+
+CI (`.github/workflows/ci.yml`) runs `npm ci`, `lint`, `type-check` and `test` on every pull request. A pre-commit hook (Husky + lint-staged) lints and formats staged files and runs `type-check`.
 
 ## Non-negotiable rules
 
