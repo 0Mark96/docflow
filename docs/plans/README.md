@@ -19,14 +19,15 @@ The status lives in the plan, not in this index, so parallel tasks never edit th
 
 ## Index
 
-Planned tasks (files are written by the task itself, before the code):
+Planned tasks (a plan without a link is written by its task, before the code):
 
 | Plan | Milestone | Depends on |
 |---|---|---|
 | [`m1-01-project-scaffold`](m1-01-project-scaffold.md) | M1 | none |
-| `m2-01-login-documents-and-storage` | M2 | m1-01 |
-| `m2-02-login-page` | M2 | m2-01 |
-| `m3-01-extraction-contract` | M3 | m2-01 |
+| [`m2-01-login-and-companies`](m2-01-login-and-companies.md) | M2 | m1-01 |
+| [`m2-02-documents-and-storage`](m2-02-documents-and-storage.md) | M2 | m2-01 |
+| [`m2-03-uploaded-files-page`](m2-03-uploaded-files-page.md) | M2 | m2-02 |
+| `m3-01-extraction-contract` | M3 | m2-03 |
 | `m3-02-fatturapa-parser` | M3 | m3-01 |
 | `m3-03-llm-extraction` | M3 | m3-01 |
 | `m3-04-data-table` | M3 | m3-01 |
@@ -47,8 +48,8 @@ A wave starts when the pull requests of the previous wave are merged. Plans in t
 | Wave | Plans | Mode |
 |---|---|---|
 | 1 | m1-01 | alone |
-| 2 | m2-01 | alone |
-| 3 | m2-02 (login page), m3-01 (extraction contract) | parallel |
+| 2 | m2-01, then m2-02, then m2-03 | one at a time, in this order |
+| 3 | m3-01 (extraction contract) | alone |
 | 4 | m3-02, m3-03, m3-04, m6-01 | parallel |
 | 5 | m3-05 (extraction pipeline) | alone: it joins m3-02, m3-03 and m3-04 |
 | 6 | m4-01, m4-02 | parallel |

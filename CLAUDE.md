@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+@AGENTS.md
+
 ## Project overview
 
 DocFlow: document intelligence web app for SMBs. Users upload invoices, contracts and quotes; the app extracts structured data and answers questions with cited sources. Product scope: `docs/product.md`. Architecture: `docs/architecture.md`. Milestones: `docs/roadmap.md`.

@@ -35,9 +35,18 @@ A logged-out request to a private page redirects to `/`; a logged-in visit to `/
 
 ## 2. Data flows
 
+### 2.0 Login
+
+1. On `/` the user enters their email. A Server Action asks Supabase Auth to send a one-time link (no password).
+2. The link opens `/auth/confirm`, which turns it into a session cookie and redirects to `/documents`. An expired or reused link returns to `/` with an error message.
+3. The first login of a new email creates the user; a database trigger creates their company and profile.
+4. `src/proxy.ts` refreshes the session and redirects between public and private pages. The database still enforces RLS with `current_company_id()`.
+
+Development runs on the local Supabase stack (Docker, via the Supabase CLI); login emails are read in its local mailbox. A hosted project and a custom SMTP provider come with the deploy (M6).
+
 ### 2.1 Upload and extraction
 
-1. The user uploads a file. A Server Action validates type and size, stores the file in the company's Storage folder and creates a `documents` row with `status = 'processing'`.
+1. The user uploads a file to a Route Handler (`POST /api/documents`). The server checks size (at most 4 MB, below the Vercel request limit) and type from the content, rejects a file whose SHA-256 is already stored in the company (`409`, with a link to the existing document), stores the file at `<company_id>/<document_id>.<ext>` in the private `documents` bucket and creates a `documents` row with `status = 'uploaded'`; extraction (M3) then moves it to `processing`.
 2. The file type decides the extractor:
    - **FatturaPA XML** → deterministic parser (`fast-xml-parser`), mapped to the `ExtractedFields` schema.
    - **PDF / TXT** → text extraction, then an LLM call with a JSON schema; the result is validated with Zod.
@@ -59,7 +68,7 @@ Retrieval starts with Postgres full-text search and moves to vector search (pgve
 |---|---|---|
 | `companies` | `id`, `name` | Tenant |
 | `profiles` | `user_id`, `company_id` | One company per user (MVP) |
-| `documents` | `id`, `company_id`, `file_path`, `kind`, `status`, `error`, `created_by`, `created_at` | `kind`: `fatturapa`, `pdf`, `text` |
+| `documents` | `id`, `company_id`, `file_path`, `file_name`, `mime_type`, `size_bytes`, `content_sha256`, `kind`, `status`, `error_message`, `created_by`, `created_at` | `kind`: `fatturapa`, `pdf`, `text`; `status`: `uploaded`, `processing`, `ready`, `failed`; content hash unique per company |
 | `extracted_fields` | `document_id`, `supplier`, `amount`, `currency`, `due_date`, `source`, `confidence`, `corrected_by` | One row per document (MVP) |
 | `document_chunks` | `id`, `document_id`, `company_id`, `content`, `embedding` | `company_id` denormalized for RLS and filtering |
 | `audit_log` | `id`, `company_id`, `user_id`, `action`, `target_id`, `created_at` | Append-only |
