@@ -2,7 +2,7 @@
 
 - Milestone: M2
 - Depends on: m1-01
-- Status: in progress
+- Status: done
 - Branch: `claude/project-thread-r7khs2` from `main`
 
 ## Goal
@@ -37,7 +37,7 @@ A visitor opens `/`, reads what DocFlow does and logs in with a link sent by ema
 - `npx supabase start`, copy `API_URL` and `PUBLISHABLE_KEY` into `.env.local`, `npm run dev`.
 - On `http://localhost:3000` the login form is visible without scrolling on desktop and on a phone.
 - An invalid email shows "Controlla l'indirizzo email: manca qualcosa."
-- A valid email shows "Link inviato a …"; the email arrives in Mailpit (`http://127.0.0.1:54324`); its link opens `/documents`.
+- A valid email shows "Link inviato a …"; the email arrives in Mailpit (`http://127.0.0.1:54324`); its link opens `/documents`. The page itself comes with PR #8 (plan m2-03): until that is merged, the redirect lands on a 404, which is expected.
 - Opening the same link again goes back to `/` with "Il link non è più valido".
 - Logged out, `/documents` redirects to `/`. Logged in, `/` redirects to `/documents`.
 - `npx supabase test db`: 11 tests pass (each user sees only their company and profile, cannot create or move them, logged-out visitors read nothing).
@@ -52,4 +52,13 @@ A visitor opens `/`, reads what DocFlow does and logs in with a link sent by ema
 
 ## Outcome
 
-To be filled when the task is merged.
+All six tasks done in PR #10, CI green (`checks` and `Database`). Verified by hand in the browser: form visible without scrolling at 1280×800 and 390×844, invalid email message, link email in Mailpit, link opens `/documents`, reused link back to `/` with the error, logout, redirects in both directions, a new email gets its own company.
+
+Deviations from the plan:
+
+- **`/documents` is not part of this plan.** It is built by m2-03 (PR #8). Between the merge of this PR and PR #8, the redirect after login lands on a 404.
+- **Shared UI copied from m2-03.** `src/app/globals.css` (design tokens), `src/components/ui/button.tsx` and `src/components/app-shell/logo.tsx` are identical to the m2-03 branch, so the two pull requests do not conflict. `src/components/ui/input.tsx` is new here.
+- **Extra dependencies:** `zod` (form validation) and `server-only`, besides the Supabase packages.
+- **`Database` workflow** (`.github/workflows/db.yml`): runs the pgTAP tests only when `supabase/` changes, to keep the main CI fast.
+- **The example on the login page is static.** The mockup animates the highlighting of the contract; the page shows the final state.
+- **Local services trimmed:** realtime, edge runtime and analytics are disabled in `supabase/config.toml`; they are not used.
