@@ -1,0 +1,35 @@
+name: Database
+
+on:
+  pull_request:
+    paths:
+      - "supabase/**"
+      - ".github/workflows/db.yml"
+      - "package-lock.json"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: db-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pgtap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Postgres plus Auth (its migrations define auth.users and auth.identities used by the seed).
+      # Applies every migration and the seed.
+      - run: npx supabase start -x realtime,storage-api,imgproxy,kong,mailpit,postgrest,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+
+      - run: npx supabase test db

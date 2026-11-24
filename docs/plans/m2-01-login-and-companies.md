@@ -2,7 +2,7 @@
 
 - Milestone: M2
 - Depends on: m1-01
-- Status: to do
+- Status: in progress
 - Branch: `feature/m2-login` from `main`
 
 ## Goal
